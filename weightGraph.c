@@ -27,20 +27,23 @@ int main(){
   printf("Bienvenido al planeador de atracciones de Six Flags\nIntroduce el tiempo (en horas) que estaras con nosotros: ");
   scanf("%i", &userTime);
   userTime = userTime*60;
+  printf("\t| %i", userTime);
   fflush(stdin);
   selectAtractions(atractions);
  
   readGraph(sixflags, numberOfEdges);
-  printEdges(sixflags);
+
   
-  dijkstra(sixflags, MAX, atractions[0], atractions[i]);
- while (atractions[i] != 0){
-    if (atractions[i]!= 0){
-      dijkstra(sixflags, MAX, atractions[i], atractions[i+1]);
-    }else{
-      dijkstra(sixflags, MAX, atractions[0], -1);
-    } 
-    i++;
+  dijkstra(sixflags, MAX, atractions[0], atractions[i], &userTime);
+  while (atractions[i] != 0){
+
+      if (atractions[i]!= 0){
+        dijkstra(sixflags, MAX, atractions[i], atractions[i+1], &userTime);
+      }else{
+        dijkstra(sixflags, MAX, atractions[0], -1, &userTime);
+      } 
+      i++;
+    
   }
   
 

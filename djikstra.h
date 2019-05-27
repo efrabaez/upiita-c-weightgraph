@@ -11,8 +11,9 @@ typedef struct ed{
   int time;
 }edge;
 
-void dijkstra(edge _sixflags[MAX][MAX],int _n,int _startnode, int _to) {
- 
+void dijkstra(edge _sixflags[MAX][MAX],int _n,int _startnode, int _to, int *_usertime) {
+	
+	int userTime = 0;
 	int cost[MAX][MAX],distance[MAX],pred[MAX];
 	int visited[MAX],count= 0,mindistance=0,nextnode=0,i=0,j=0;
 	
@@ -21,6 +22,8 @@ void dijkstra(edge _sixflags[MAX][MAX],int _n,int _startnode, int _to) {
 	 * create the cost matrix
    **/
   //We start creating cost matrix
+	userTime = *_usertime;
+	
 	for(i=0;i<_n;i++){
 		for(j=0;j<_n;j++){
 			if(_sixflags[i][j].weigth==0){
@@ -62,20 +65,29 @@ void dijkstra(edge _sixflags[MAX][MAX],int _n,int _startnode, int _to) {
     }
 		count++;
 	}
+	
  
 	//print the path and distance of each node
 	for(i=0;i<_n;i++){
 		if(i!=_startnode){
-		if (i == _to && _to !=-1){
-				printf("\nDistance of node %s = %d",_sixflags[i][0].from,distance[i]);
-				printf("\nPath=%s",_sixflags[i][0].from);
-				j=i;
-				do{
-					j=pred[j];
-					printf("<-%s",_sixflags[j][0].from);
+			if (i == _to && _to !=-1){
+				userTime -= distance[i];
+				*_usertime = userTime;
 
-				}while(j!=_startnode);
+				if (userTime <= 0) {
+					printf("\nLo siento, se te acabo el tiempo que ingresaste");
+					break;
+				}else{
+					printf("\nDistancia hacia el nodo %s es de: %d te quedan %d minutos",_sixflags[i][0].from,distance[i], userTime);
+					printf("\nPath=%s",_sixflags[i][0].from);
+					j=i;
+					do{
+						j=pred[j];
+						printf("<-%s",_sixflags[j][0].from);
+
+					}while(j!=_startnode);
+				}
 			}
-	  }
-  }
+	}
+	}
 }
